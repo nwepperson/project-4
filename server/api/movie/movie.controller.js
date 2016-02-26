@@ -12,6 +12,7 @@
 import _ from 'lodash';
 import Movie from './movie.model';
 import Channel from '../channel/channel.model';
+var MovieEvents = require('./movie.events');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -125,6 +126,7 @@ export function create(req, res) {
       active: true
     });
     channel.movies.push(newMovie);
+    MovieEvents.emit('save', { movie: newMovie, channelId: channel._id });
     return channel.save();
   })
   .then(respondWithResult(res, 201))

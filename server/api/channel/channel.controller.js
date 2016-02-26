@@ -11,6 +11,7 @@
 
 import _ from 'lodash';
 import Channel from './channel.model';
+import User from '../user/user.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -76,9 +77,27 @@ export function show(req, res) {
 
 // Creates a new Channel in the DB
 export function create(req, res) {
-  Channel.createAsync(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+  if (!req.user) {
+    return res.status(404).send('It looks like you aren\'t logged in, please try again.');
+  }
+  User.findByIdAsync(req.user._id)
+  .then(function(user) {
+    if (!user) {
+      return res.status(404).send('User not found.');
+    }
+    var newChannel = Channel.create({
+      name: req.body.name,
+      description: req.body.description,
+      active: true,
+      share: req.body.share,
+      owner: req.user,
+      movies: []
+    });
+    ChannelEvents.emit('save', { channel: newChannel, user: req.user });
+    return channel.save();
+  })
+  .then(respondWithResult(res, 201))
+  .catch(handleError(res));
 }
 
 // Updates an existing Channel in the DB
