@@ -12,6 +12,7 @@
 import _ from 'lodash';
 import Movie from './movie.model';
 import Channel from '../channel/channel.model';
+import User from '../user/user.model';
 var MovieEvents = require('./movie.events');
 
 function respondWithResult(res, statusCode) {
@@ -86,48 +87,35 @@ export function create(req, res) {
     if (!channel) {
       return res.status(404).send('Channel not found.');
     }
-    var newMovie = channel.movies.create({
-      title: req.body.Title,
-      year: req.body.Year,
-      rated: req.body.Rated,
-      released: req.body.Released,
-      runtime: req.body.Runtime,
-      genre: req.body.Genre,
-      director: req.body.Director,
-      writer: req.body.Writer,
-      actors: req.body.Actors,
-      plot: req.body.Plot,
-      language: req.body.Language,
-      country: req.body.Country,
-      awards: req.body.Awards,
-      poster: req.body.Poster,
-      metascore: req.body.Metascore,
-      imdbRating: req.body.imdbRating,
-      imdbVotes: req.body.imdbVotes,
-      imdbId: req.body.imdbID,
-      type: req.body.Type,
-      tomatoMeter: req.body.tomatoMeter,
-      tomatoImage: req.body.tomatoImage,
-      tomatoRating: req.body.tomatoRating,
-      tomatoReviews: req.body.tomatoReviews,
-      tomatoFresh: req.body.tomatoFresh,
-      tomatoRotten: req.body.tomatoRotten,
-      tomatoConsensus: req.body.tomatoConsensus,
-      tomatoUserMeter: req.body.tomatoUserMeter,
-      tomatoUserRating: req.body.tomatoUserRating,
-      tomatoUserReviews: req.body.tomatoUserReviews,
-      tomatoUrl: req.body.tomatoURL,
-      dvd: req.body.DVD,
-      boxOffice: req.body.BoxOffice,
-      production: req.body.Production,
-      website: req.body.Website,
-      response: req.body.Response,
-      user: req.user,
-      active: true
+    User.find(req.user).then(function(res) {
+      var user = String(res[0]._id);
+      console.log('user res[0]: ', res[0]._id)
+      User.find(channel.owner).then(function(response) {
+        var userMatch = String(response[0]._id);
+        console.log('userMatch response[0]: ', response[0]._id);
+        if (user === userMatch) {
+          var exists;
+          channel.movies.forEach(function(movie) {
+            if (movie.imdbId === req.body.imdbId) {
+              console.log('MOVIE ALREADY EXISTS IN CHANNEL');
+              exists = true;
+            }
+          });
+          if (exists !== true) {
+            var newMovie = channel.movies.create(req.body);
+            channel.movies.push(newMovie);
+            console.log('newMovie id created in api/movie.controller', newMovie._id);
+            channel.save();
+            return MovieEvents.emit('save', { movie: newMovie, channelId: channel._id });
+          }
+        }
+        else {
+          console.log('user: ', typeof user, user);
+          console.log('userMatch: ', typeof userMatch, userMatch);
+          console.log("Cannot add to another user's list");
+        }
+      });
     });
-    channel.movies.push(newMovie);
-    MovieEvents.emit('save', { movie: newMovie, channelId: channel._id });
-    return channel.save();
   })
   .then(respondWithResult(res, 201))
   .catch(handleError(res));
@@ -147,8 +135,38 @@ export function update(req, res) {
 
 // Deletes a Movie from the DB
 export function destroy(req, res) {
-  Movie.findByIdAsync(req.params.id)
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+  Channel.findByIdAsync(req.params.id)
+  .then(function(channel) {
+    console.log(channel.movies);
+    if (!channel) {
+      return res.status(404).send('Channel not found.');
+    }
+    User.find(req.user).then(function(res) {
+      var user = String(res[0]._id);
+      console.log('user res[0]: ', res[0]._id)
+      User.find(channel.owner).then(function(response) {
+        var userMatch = String(response[0]._id);
+        console.log('userMatch response[0]: ', response[0]._id);
+        if (user === userMatch) {
+          channel.movies.forEach(function(movie) {
+            if (movie._id.equals(req.params.movieId)) {
+              console.log('Movie Match in DB', movie);
+              var index = channel.movies.indexOf(movie);
+              console.log('Index: ', index);
+              channel.movies.splice(index, 1);
+              channel.save();
+              return MovieEvents.emit('remove', { movie: movie, channelId: channel._id });
+            }
+          });
+        }
+        else {
+          console.log('user: ', typeof user, user);
+          console.log('userMatch: ', typeof userMatch, userMatch);
+          console.log("Cannot delete from another user's list");
+        }
+      });
+    });
+  })
+  .then(respondWithResult(res, 201))
+  .catch(handleError(res));
 }

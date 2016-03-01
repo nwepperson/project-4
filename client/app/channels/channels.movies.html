@@ -1,0 +1,12 @@
+<section class="container">
+  <div class="row">
+    <article class="col-md-6" style="height: 400px; overflow-y: scroll;">
+      <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
+        <dl>
+          <dt><span class="text-primary"><strong><a ui-sref="/channels/movies/{{movie._id}}">{{ movie.Title }}</a><strong></span> <small>{{ movie.Year }}</small><button ng-click="vm.deleteMovie(movie)">X</button></dt>
+          <dd><div class="well" style="white-space: pre-wrap; padding: 9px;">{{ movie.Plot }}</div></dd>
+        </dl>
+      </div>
+    </article>
+  </div>
+</section>

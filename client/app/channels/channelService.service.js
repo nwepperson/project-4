@@ -14,28 +14,38 @@ angular.module('movieShareApp')
       return promise;
     };
 
+    svc.getPublicChannels = function() {
+      var promise= $http.get('/api/channels/public');
+      promise.then(function(response) {
+        svc.PublicChannels = response.data;
+      });
+      return promise;
+    };
+
     svc.sendMovie = function(newMovie, channel) {
-      var result = $http.get('http://www.omdbapi.com/?t=' + filter + '&tomatoes=true&plot=full');
+      $http.get('http://www.omdbapi.com/?t=' + newMovie + '&tomatoes=true&plot=full')
+      .then(function(response) {
+      if (response.data.Response === 'True') {
       return $http.post('/api/movies',
-                        { title: response.data.Title,
-                          year: response.data.Year,
-                          rated: response.data.Rated,
-                          released: response.data.Released,
-                          runtime: response.data.Runtime,
-                          genre: response.data.Genre,
-                          director: response.data.Director,
-                          writer: response.data.Writer,
-                          actors: response.data.Actors,
-                          plot: response.data.Plot,
-                          language: response.data.Language,
-                          country: response.data.Country,
-                          awards: response.data.Awards,
-                          poster: response.data.Poster,
-                          metascore: response.data.Metascore,
+                        { Title: response.data.Title,
+                          Year: response.data.Year,
+                          Rated: response.data.Rated,
+                          Released: response.data.Released,
+                          Runtime: response.data.Runtime,
+                          Genre: response.data.Genre,
+                          Director: response.data.Director,
+                          Writer: response.data.Writer,
+                          Actors: response.data.Actors,
+                          Plot: response.data.Plot,
+                          Language: response.data.Language,
+                          Country: response.data.Country,
+                          Awards: response.data.Awards,
+                          Poster: response.data.Poster,
+                          Metascore: response.data.Metascore,
                           imdbRating: response.data.imdbRating,
                           imdbVotes: response.data.imdbVotes,
                           imdbId: response.data.imdbID,
-                          type: response.data.Type,
+                          Type: response.data.Type,
                           tomatoMeter: response.data.tomatoMeter,
                           tomatoImage: response.data.tomatoImage,
                           tomatoRating: response.data.tomatoRating,
@@ -47,20 +57,52 @@ angular.module('movieShareApp')
                           tomatoUserRating: response.data.tomatoUserRating,
                           tomatoUserReviews: response.data.tomatoUserReviews,
                           tomatoUrl: response.data.tomatoURL,
-                          dvd: response.data.DVD,
-                          boxOffice: response.data.BoxOffice,
-                          production: response.data.Production,
-                          website: response.data.Website,
-                          response: response.data.Response,
-                          user: req.user,
+                          DVD: response.data.DVD,
+                          BoxOffice: response.data.BoxOffice,
+                          Production: response.data.Production,
+                          Website: response.data.Website,
+                          Response: response.data.Response,
                           channelId: channel._id,
                           active: true
                         });
+      }
+      });
+    };
+
+    svc.deleteMovie = function(movie, channel) {
+      console.log('movie: ', movie);
+      console.log('channel: ', channel);
+      var index = channel.movies.indexOf(movie);
+      console.log('index: ', index);
+      var match = channel.movies[index];
+      console.log('match: ', match);
+      return $http.delete('/api/movies/' + channel._id + '/' + match._id);
     };
 
     svc.findById = function(id) {
       return _.find(svc.channels, function(channel) {
         return channel._id === id;
       });
+    };
+
+    svc.newChannel = function(newChannelName, newChannelDescription, newChannelShare) {
+      console.log('newChannelName: ', newChannelName);
+      console.log('newChannelDescription: ', newChannelDescription);
+      console.log('newChannelShare: ', newChannelShare);
+      if (newChannelName !== undefined && newChannelName !== '') {
+        if (newChannelDescription !== undefined && newChannelDescription !== '') {
+          if (newChannelShare !== undefined  && newChannelShare !== '') {
+            return $http.post('/api/channels',
+                            { name: newChannelName,
+                              description: newChannelDescription,
+                              share: newChannelShare
+                            });
+          }
+        }
+      }
+    };
+
+    svc.deleteChannel = function(channel) {
+      return $http.delete('/api/channels/' + channel._id);
     };
   });

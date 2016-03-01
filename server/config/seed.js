@@ -75,7 +75,7 @@ function createChannels(users) {
         name: 'Awesome Movies',
         description: 'Great all around awesome fucking cool ass movies!',
         active: true,
-        share: 'public'
+        share: 'public',
         owner: users[0]._id,
         movies: []
       },
@@ -83,7 +83,7 @@ function createChannels(users) {
         name: 'Amazingly Terrible',
         description: 'If this is bad, i dont want tot know good!',
         active: true,
-        share: 'public'
+        share: 'public',
         owner: users[0]._id,
         movies: []
       },
@@ -91,7 +91,7 @@ function createChannels(users) {
         name: 'Fucking Crazy',
         description: 'Watch at your own risk...',
         active: true,
-        share: 'public'
+        share: 'public',
         owner: users[1]._id,
         movies: []
       }

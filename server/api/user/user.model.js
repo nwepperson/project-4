@@ -3,6 +3,8 @@
 import crypto from 'crypto';
 var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 import {Schema} from 'mongoose';
+var Movie = require('../movie/movie.model');
+var Channel = require('../channel/channel.model');
 
 var UserSchema = new Schema({
   name: String,
@@ -16,7 +18,8 @@ var UserSchema = new Schema({
   },
   password: String,
   provider: String,
-  salt: String
+  salt: String,
+  channels: [Channel.schema]
 });
 
 /**

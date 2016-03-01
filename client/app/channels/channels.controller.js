@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('movieShareApp')
-  .controller('ChannelsCtrl', function(channelService) {
+  .controller('ChannelsCtrl', function(channelService, $scope, socketFactory) {
     var vm = this;
     vm.newMovie = 'Search for movie here';
 
@@ -17,33 +17,109 @@ angular.module('movieShareApp')
     channelService.getChannels().then(function(response) {
       vm.channels = response.data;
       vm.selectedChannel = vm.channels.length > 0 ? vm.channels[0] : null;
+      channelService.getPublicChannels().then(function(response) {
+        vm.publicChannels = response.data;
+      });
 
       // socket.syncUpdates('movie', vm.selectedChannel.movies);
       // TODO: I need to handle movies that arrive on other channels.
       socket.on('movie:save', function(eventData) {
+        console.log('eventData.movie._id: ', eventData.movie._id);
         var movie = eventData.movie;
         var channelId = eventData.channelId;
         var affectedChannel = channelService.findById(channelId);
-        var oldMovie = _.find(affectedChannel.movies, {_id: movie._id});
-        var index = affectedChannel.movies.indexOf(oldMovie);
-
-        // replace oldMovie if it exists
+        console.log('affected Channel: ', affectedChannel);
+        var match;
+        affectedChannel.movies.forEach(function(movieSearch) {
+          if (movie.imdbId === movieSearch.imdbId) {
+            match = movieSearch;
+          }
+        });
+        console.log('match: ', match);
         // otherwise just add movie to the collection
-        if (oldMovie) {
-          affectedChannel.movies.splice(index, 1, movie);
-        } else {
+        if (match === undefined) {
           affectedChannel.movies.push(movie);
+          channelService.getChannels().then(function(response) {
+            vm.channels = response.data;
+            vm.selectedChannel = affectedChannel;
+            vm.newMovie = '';
+            channelService.getPublicChannels().then(function(response) {
+              vm.publicChannels = response.data;
+            });
+          });
         }
+      });
+
+      socket.on('movie:remove', function(eventData) {
+        var movie = eventData.movie;
+        var channelId = eventData.channelId;
+        var affectedChannel;
+        var oldMovie;
+        vm.channels.forEach(function(channel) {
+          if (channel._id === channelId) {
+            return affectedChannel = channel;
+          }
+        });
+        console.log('Affected Channel: ', affectedChannel);
+        affectedChannel.movies.forEach(function(movieSearch) {
+          if (movieSearch._id === movie._id) {
+            oldMovie = movieSearch;
+          }
+        });
+        console.log('Old Movie: ', oldMovie);
+        var index = affectedChannel.movies.indexOf(oldMovie);
+        console.log('Index: ', index);
+        if (oldMovie) {
+          affectedChannel.movies.splice(index, 1);
+          channelService.getChannels().then(function(response) {
+            vm.channels = response.data;
+            vm.selectedChannel = affectedChannel;
+            channelService.getPublicChannels().then(function(response) {
+              vm.publicChannels = response.data;
+            });
+          });
+        };
+      });
+
+      socket.on('channel:save', function(eventData) {
+        var channel = eventData
+        var match;
+        vm.channels.forEach(function(channelSearch) {
+          if (channelSearch.name === channel.name) {
+            match = true;
+          }
+        });
+        if (match !== true) {
+          vm.channels.push(channel);
+          var index = vm.channels.indexOf(channel);
+          channelService.getChannels().then(function(response) {
+            vm.channels = response.data;
+            // vm.selectedChannel = vm.channels[index];
+            channelService.getPublicChannels().then(function(response) {
+              vm.publicChannels = response.data;
+            });
+          });
+        };
+      });
+
+      socket.on('channel:remove', function(eventData) {
+        var channel = eventData
+        var index = vm.channels.indexOf(channel);
+        vm.channels.splice(index, 1);
+        channelService.getChannels().then(function(response) {
+          vm.channels = response.data;
+          vm.selectedChannel = vm.channels.length > 0 ? vm.channels[0] : null;
+          channelService.getPublicChannels().then(function(response) {
+            vm.publicChannels = response.data;
+          });
+        });
       });
 
     });
 
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('movie');
-    });
-
     vm.setSelected = function(channel) {
       vm.selectedChannel = channel;
+      console.log('CHANNEL MOVIES: ', channel.movies);
     };
 
     vm.isSelected = function(channel) {
@@ -51,9 +127,22 @@ angular.module('movieShareApp')
     };
 
     vm.sendMovie = function() {
-      channelService.sendMovie(vm.newMovie, vm.selectedChannel)
-      .then(function(response) {
-        vm.newMovie = 'Search for movie here';
-      });
+      return channelService.sendMovie(vm.newMovie, vm.selectedChannel);
+    };
+
+    vm.deleteMovie = function(movie) {
+      channelService.deleteMovie(movie, vm.selectedChannel);
+    };
+
+    vm.newChannel = function() {
+      channelService.newChannel(vm.newChannelName, vm.newChannelDescription, vm.newChannelShare);
+      vm.newChannelName = '';
+      vm.newChannelDescription = '';
+      vm.newChannelShare = '';
+    };
+
+    vm.deleteChannel = function(channel) {
+      channelService.deleteChannel(channel);
     };
   });
+

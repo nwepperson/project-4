@@ -17,7 +17,71 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 // Component styles are injected through grunt
 // injector
 @import 'admin/admin';
+@import 'channels/channels';
 @import 'main/main';
 @import '../components/footer/footer';
 @import '../components/modal/modal';
 // endinjector
+
+body.ng-scope{
+  background-color: black;
+  background-size: stretch;
+  background-repeat: no-repeat;
+  h1 {
+    color: white;
+  }
+  h2 {
+    color: white;
+  }
+  h3 {
+    color: white;
+  }
+  h4 {
+    color: green;
+  }
+  p {
+    color: white;
+  }
+  a {
+    color: purple;
+  }
+  label {
+    color: white;
+  }
+  dt, dd {
+    color: white;
+  }
+  .btn {
+    background-color: purple;
+    border-color: purple;
+  }
+  .panel-primary {
+    border-color: grey;
+  }
+  .panel-heading {
+    background-color: grey;
+    border-color: grey;
+  }
+  .channel {
+    background-image: url('../assets/images/black.jpg');
+    background-size: cover;
+  }
+  .well {
+    background-color: grey;
+  }
+}
+
+.navbar-default {
+  background-color: grey;
+  border-color: grey;
+  .navbar-brand {
+    color: purple;
+  }
+  .navbar-text {
+    color: purple;
+  }
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: purple;
+}

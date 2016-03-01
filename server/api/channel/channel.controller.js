@@ -12,6 +12,8 @@
 import _ from 'lodash';
 import Channel from './channel.model';
 import User from '../user/user.model';
+import MovieEvents from '../movie/movie.events';
+// var ChannelEvents = require('./channel.events');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -62,14 +64,21 @@ function handleError(res, statusCode) {
 
 // Gets a list of Channels
 export function index(req, res) {
-  Channel.find().populate('owner messages.user')
+  Channel.find({owner: req.user}).populate('owner movies.user')
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Gets a list of public Channels
+export function publicIndex(req, res) {
+  Channel.find({share: 'public'}).populate('owner movies.user')
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Channel from the DB
 export function show(req, res) {
-  Channel.findById(req.params.id).populate('owner messages.user')
+  Channel.findById(req.params.id).populate('owner movies.user')
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -80,24 +89,28 @@ export function create(req, res) {
   if (!req.user) {
     return res.status(404).send('It looks like you aren\'t logged in, please try again.');
   }
-  User.findByIdAsync(req.user._id)
-  .then(function(user) {
-    if (!user) {
-      return res.status(404).send('User not found.');
-    }
+  var channels;
+  var match;
+  Channel.find().then(function(response) {
+    channels = response;
+    for (var i = 0; i < channels.length; i++) {
+      var channel = channels[i];
+      if (channel.name === req.body.name){
+        console.log('match name');
+        match = true;
+      }
+    };
+    if (match !== true) {
     var newChannel = Channel.create({
-      name: req.body.name,
-      description: req.body.description,
-      active: true,
-      share: req.body.share,
-      owner: req.user,
-      movies: []
+    name: req.body.name,
+    description: req.body.description,
+    active: true,
+    share: req.body.share,
+    owner: req.user,
+    movies: []
     });
-    ChannelEvents.emit('save', { channel: newChannel, user: req.user });
-    return channel.save();
-  })
-  .then(respondWithResult(res, 201))
-  .catch(handleError(res));
+    };
+  });
 }
 
 // Updates an existing Channel in the DB
@@ -105,7 +118,7 @@ export function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Channel.findById(req.params.id).populate('owner messages.user')
+  Channel.findById(req.params.id).populate('owner movies.user')
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(respondWithResult(res))
@@ -114,7 +127,7 @@ export function update(req, res) {
 
 // Deletes a Channel from the DB
 export function destroy(req, res) {
-  Channel.findById(req.params.id).populate('owner messages.user')
+  Channel.findById(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));

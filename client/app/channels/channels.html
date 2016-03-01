@@ -1,42 +1,82 @@
 <section class="container">
   <div class="row">
     <article class="col-md-6">
-      <h3>Channels:</h3>
+      <h3>Add Channel</h3>
+      <form>
+        <input class="form-control"
+                  ng-model="vm.newChannelName"
+                  placeholder="name">
+        </input>
+        <input class="form-control"
+                  ng-model="vm.newChannelDescription"
+                  placeholder="description">
+        </input>
+        <select ng-model="vm.newChannelShare">
+          <option value="" disabled>- - Please Select One - -</option>
+          <option value="public" default>Public</option>
+          <option value="private" selected>Private</option>
+        </select>
+        <br>
+        <button type="submit" class="btn btn-primary" ng-click="vm.newChannel()">Create Channel</button>
+      </form>
+      <h3>Public Channels:</h3>
       <div class="panel panel-primary channel"
-           ng-repeat="channel in vm.channels | orderBy: 'name'"
+           ng-repeat="channel in vm.publicChannels | orderBy: 'name'"
            ng-click="vm.setSelected(channel)">
         <div class="panel-heading">
           <h3 class="panel-title">
-            <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{ channel.name }}
+            <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a> {{channel.owner.name}}'s {{ channel.name }} </a>
           </h3>
         </div>
         <div class="panel-body">
           <dl class="dl-horizontal">
             <dt>Description</dt><dd>{{ channel.description }}</dd>
             <dt>Active</dt><dd>{{ channel.active }}</dd>
+            <dt>Share Status</dt><dd>{{ channel.share }}</dd>
             <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
-            <dt>Movies</dt><dd>{{ channel.movies.length }}</dd>
+            <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
+          </dl>
+        </div>
+      </div>
+      <h3>My Channels:</h3>
+      <div class="panel panel-primary channel"
+           ng-repeat="channel in vm.channels | orderBy: 'name'"
+           ng-click="vm.setSelected(channel)">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a > {{ channel.name }} </a>
+            <button ng-click="vm.deleteChannel(channel)" class="btn btn-danger">Delete</button>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <dl class="dl-horizontal">
+            <dt>Description</dt><dd>{{ channel.description }}</dd>
+            <dt>Active</dt><dd>{{ channel.active }}</dd>
+            <dt>Share Status</dt><dd>{{ channel.share }}</dd>
+            <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
+            <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
           </dl>
         </div>
       </div>
     </article>
     <article class="col-md-6" style="height: 400px; overflow-y: scroll;">
-      <h3>Channel {{ vm.selectedChannel.name }}</h3>
+      <h3>Add movie to {{ vm.selectedChannel.name }}</h3>
       <form>
-        <textarea class="form-control"
-                  rows="3"
+        <input class="form-control"
                   ng-model="vm.newMovie"
-                  tabindex="1"
-                  onfocus="if (this.value=='type new movie here') this.value = ''">
-        </textarea>
+                  onfocus="if (this.value=='Search for movie here') this.value = ''">
+        </input>
         <br>
         <button type="submit" class="btn btn-primary" ng-click="vm.sendMovie()">Send</button>
       </form>
-      <hr>
-      <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies | orderBy: '-createdAt'">
+      <br>
+      <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
         <dl>
-          <dt><span class="text-primary"><strong>{{ movie.user.name }}<strong></span> <small>{{ movie.year }}</small></dt>
-          <dd><div class="well" style="white-space: pre-wrap; padding: 9px;">{{ movie.plot }}</div></dd>
+          <dt><span class="text-primary"><strong><a ui-sref="/channels/movies/{{movie._id}}">{{ movie.Title }}</a><strong></span> - <small>{{ movie.Year }}</small> - <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button></dt>
+          <dd><div class="well" style="white-space: pre-wrap; padding: 9px;">
+          <h5>Plot: </h5>{{ movie.Plot }}
+          <img class="poster" src="{{movie.Poster}}">
+          </div></dd>
         </dl>
       </div>
     </article>
