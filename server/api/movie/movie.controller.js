@@ -82,7 +82,7 @@ export function create(req, res) {
   if (!req.user) {
     return res.status(404).send('It looks like you aren\'t logged in, please try again.');
   }
-  Channel.findByIdAsync(req.body.channelId)
+  Channel.findById(req.body.channelId)
   .then(function(channel) {
     if (!channel) {
       return res.status(404).send('Channel not found.');
@@ -135,7 +135,7 @@ export function update(req, res) {
 
 // Deletes a Movie from the DB
 export function destroy(req, res) {
-  Channel.findByIdAsync(req.params.id)
+  Channel.findById(req.params.id)
   .then(function(channel) {
     console.log(channel.movies);
     if (!channel) {

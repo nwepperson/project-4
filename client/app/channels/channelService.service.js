@@ -80,9 +80,19 @@ angular.module('movieShareApp')
     };
 
     svc.findById = function(id) {
-      return _.find(svc.channels, function(channel) {
+      console.log('findById called with id:', id)
+      console.log('svc.channels:', svc.channels);
+      var result = _.find(svc.channels, function(channel) {
         return channel._id === id;
       });
+      if (!result) {
+        console.log('now serching svc.PublicChannels:', svc.PublicChannels);
+        result = _.find(svc.PublicChannels, function(channel) {
+          return channel._id === id;
+        });
+      }
+      console.log('findById returning:', result);
+      return result;
     };
 
     svc.newChannel = function(newChannelName, newChannelDescription, newChannelShare) {

@@ -74,8 +74,12 @@
         <dl>
           <dt><span class="text-primary"><strong><a ui-sref="/channels/movies/{{movie._id}}">{{ movie.Title }}</a><strong></span> - <small>{{ movie.Year }}</small> - <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button></dt>
           <dd><div class="well" style="white-space: pre-wrap; padding: 9px;">
-          <h5>Plot: </h5>{{ movie.Plot }}
-          <img class="poster" src="{{movie.Poster}}">
+          <div class"movie-content">
+            <h5>Plot: </h5>{{ movie.Plot }}
+          </div>
+          <div class="movie-poster">
+            <img src="{{movie.Poster}}">
+          </div>
           </div></dd>
         </dl>
       </div>

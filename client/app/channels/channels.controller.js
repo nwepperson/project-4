@@ -24,7 +24,9 @@ angular.module('movieShareApp')
       // socket.syncUpdates('movie', vm.selectedChannel.movies);
       // TODO: I need to handle movies that arrive on other channels.
       socket.on('movie:save', function(eventData) {
+        console.log('event data: ', eventData);
         console.log('eventData.movie._id: ', eventData.movie._id);
+        console.log('eventData.channelId: ', eventData.channelId);
         var movie = eventData.movie;
         var channelId = eventData.channelId;
         var affectedChannel = channelService.findById(channelId);
@@ -53,14 +55,9 @@ angular.module('movieShareApp')
       socket.on('movie:remove', function(eventData) {
         var movie = eventData.movie;
         var channelId = eventData.channelId;
-        var affectedChannel;
         var oldMovie;
-        vm.channels.forEach(function(channel) {
-          if (channel._id === channelId) {
-            return affectedChannel = channel;
-          }
-        });
-        console.log('Affected Channel: ', affectedChannel);
+        var affectedChannel = channelService.findById(channelId);
+        console.log('affected Channel: ', affectedChannel);
         affectedChannel.movies.forEach(function(movieSearch) {
           if (movieSearch._id === movie._id) {
             oldMovie = movieSearch;
