@@ -1,6 +1,6 @@
 <section class="container">
   <div class="row">
-    <article class="col-md-6">
+    <div class="add-channel">
       <h3>Add Channel</h3>
       <form>
         <input class="form-control"
@@ -15,51 +15,58 @@
           <option value="" disabled>- - Please Select One - -</option>
           <option value="public" default>Public</option>
           <option value="private" selected>Private</option>
-        </select>
-        <br>
+        </select><br>
         <button type="submit" class="btn btn-primary" ng-click="vm.newChannel()">Create Channel</button>
-      </form>
-      <h3>Public Channels:</h3>
-      <div class="panel panel-primary channel"
-           ng-repeat="channel in vm.publicChannels | orderBy: 'name'"
-           ng-click="vm.setSelected(channel)">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a> {{channel.owner.name}}'s {{ channel.name }} </a>
-          </h3>
+      </form><br>
+    </div>
+    <div class="channels-display-l">
+      <h3>Public Channels:</h3><br>
+      <article class="col-md-6">
+        <div class="panel panel-primary channel"
+             ng-repeat="channel in vm.publicChannels | orderBy: 'name'"
+             ng-click="vm.setSelected(channel)">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel"> {{channel.owner.name}}'s {{ channel.name }} </a>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <dl class="dl-horizontal">
+              <dt>Description</dt><dd>{{ channel.description }}</dd>
+              <dt>Active</dt><dd>{{ channel.active }}</dd>
+              <dt>Share Status</dt><dd>{{ channel.share }}</dd>
+              <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
+              <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
+            </dl>
+          </div>
         </div>
-        <div class="panel-body">
-          <dl class="dl-horizontal">
-            <dt>Description</dt><dd>{{ channel.description }}</dd>
-            <dt>Active</dt><dd>{{ channel.active }}</dd>
-            <dt>Share Status</dt><dd>{{ channel.share }}</dd>
-            <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
-            <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
-          </dl>
+      </article><br>
+    </div>
+    <div class="channels-display-r">
+      <h3>My Channels:</h3><br>
+      <article class="col-md-6">
+        <div class="panel panel-primary channel"
+             ng-repeat="channel in vm.channels | orderBy: 'name'"
+             ng-click="vm.setSelected(channel)">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel({id: 'hello'})"> {{ channel.name }} </a>
+              <button ng-click="vm.deleteChannel(channel)" class="btn btn-danger">Delete</button>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <dl class="dl-horizontal">
+              <dt>Description</dt><dd>{{ channel.description }}</dd>
+              <dt>Active</dt><dd>{{ channel.active }}</dd>
+              <dt>Share Status</dt><dd>{{ channel.share }}</dd>
+              <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
+              <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
+            </dl>
+          </div>
         </div>
-      </div>
-      <h3>My Channels:</h3>
-      <div class="panel panel-primary channel"
-           ng-repeat="channel in vm.channels | orderBy: 'name'"
-           ng-click="vm.setSelected(channel)">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a > {{ channel.name }} </a>
-            <button ng-click="vm.deleteChannel(channel)" class="btn btn-danger">Delete</button>
-          </h3>
-        </div>
-        <div class="panel-body">
-          <dl class="dl-horizontal">
-            <dt>Description</dt><dd>{{ channel.description }}</dd>
-            <dt>Active</dt><dd>{{ channel.active }}</dd>
-            <dt>Share Status</dt><dd>{{ channel.share }}</dd>
-            <dt>Owner</dt><dd>{{ channel.owner.name }}</dd>
-            <dt>Movies</dt><dd><span class="badge" animate-on-change='channel.movies.length'>{{ channel.movies.length }}</span></dd>
-          </dl>
-        </div>
-      </div>
-    </article>
-    <article class="col-md-6" style="height: 400px; overflow-y: scroll;">
+      </article><br>
+    </div>
+    <div class="add-movie">
       <h3>Add movie to {{ vm.selectedChannel.name }}</h3>
       <form>
         <input class="form-control"
@@ -68,21 +75,24 @@
         </input>
         <br>
         <button type="submit" class="btn btn-primary" ng-click="vm.sendMovie()">Send</button>
-      </form>
+      </form><br>
+    </div>
+    <div class="movies-display">
+    <article ng-show="vm.selectedChannel.movies.length > 0"class="col-md-6">
       <br>
       <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
         <dl>
-          <dt><span class="text-primary"><strong><a ui-sref="/channels/movies/{{movie._id}}">{{ movie.Title }}</a><strong></span> - <small>{{ movie.Year }}</small> - <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button></dt>
-          <dd><div class="well" style="white-space: pre-wrap; padding: 9px;">
-          <div class"movie-content">
-            <h5>Plot: </h5>{{ movie.Plot }}
-          </div>
-          <div class="movie-poster">
+          <dd><div class="well" style="background-image: url({{movie.Poster}}); background-size: cover;">
+            <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button><h4>{{ movie.Title }}</h4><br>
+            <h5>Release Year: {{ movie.Year }}</h5><br>
+            <h5>Plot: </h5><p>{{ movie.Plot }}</p>
+          <!-- <div class="movie-poster">
             <img src="{{movie.Poster}}">
-          </div>
+          </div> -->
           </div></dd>
         </dl>
       </div>
     </article>
+    </div>
   </div>
 </section>

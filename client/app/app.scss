@@ -37,13 +37,13 @@ body.ng-scope{
     color: white;
   }
   h4 {
-    color: green;
+    color: #0084FF;
   }
   p {
     color: white;
   }
   a {
-    color: purple;
+    color: #0084FF;
   }
   label {
     color: white;
@@ -52,36 +52,114 @@ body.ng-scope{
     color: white;
   }
   .btn {
-    background-color: purple;
-    border-color: purple;
+    background-color: #0084FF;
+    border-color: #0084FF;
+    color: white;
   }
   .panel-primary {
-    border-color: grey;
+    border-color: #313131;
   }
   .panel-heading {
-    background-color: grey;
-    border-color: grey;
+    background-color: #313131;
+    border-color: #313131;
   }
   .channel {
     background-image: url('../assets/images/black.jpg');
     background-size: cover;
   }
   .well {
-    background-color: grey;
+    background-color: #313131;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    h4, h5, p {
+      margin: 0px;
+      background-color: #000000;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      display: inline-block;
+      padding: 2px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    .btn {
+      position: relative;
+      float: right;
+      margin-top: 5px;
+    }
   }
 }
 
 .navbar-default {
-  background-color: grey;
-  border-color: grey;
+  background-color: #313131;
+  border-color: #313131;
   .navbar-brand {
-    color: purple;
+    color: #0084FF;
   }
   .navbar-text {
-    color: purple;
+    color: #0084FF;
   }
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: purple;
+  color: #0084FF;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: white;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #0084FF;
+  background-color: #000000;
+  border: 1px solid black;
+  border-radius: 7%;
+}
+
+.col-md-6 {
+  height: 500px;
+  overflow-y: scroll;
+  border: 10px solid #0084FF;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-channel {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.channels-display-l {
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: scroll;
+}
+
+.channels-display-r {
+  margin-right: auto;
+  margin-left: auto;
+  overflow-y: scroll;
+}
+
+.add-movie {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.movies-display {
+  padding-top: 5px;
+  overflow-y: scroll;
+}
+
+.movie-poster {
+  height: 50%;
+  width: 50%;
+  margin: auto;
 }
