@@ -27,7 +27,8 @@
              ng-click="vm.setSelected(channel)">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel"> {{channel.owner.name}}'s {{ channel.name }} </a>
+              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel({id: channel._id})"> {{channel.owner.name}}'s {{ channel.name }} </a>
+              <button class="btn btn-danger" ng-show="vm.me._id !== channel.owner._id" ng-click="vm.copyChannel(channel)">Copy Channel</button>
             </h3>
           </div>
           <div class="panel-body">
@@ -50,7 +51,7 @@
              ng-click="vm.setSelected(channel)">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel({id: 'hello'})"> {{ channel.name }} </a>
+              <span ng-show="vm.isSelected(channel)" class="glyphicon glyphicon-ok" aria-hidden="true"></span><a ui-sref="channel({id: channel._id})"> {{ channel.name }} </a>
               <button ng-click="vm.deleteChannel(channel)" class="btn btn-danger">Delete</button>
             </h3>
           </div>
@@ -78,21 +79,52 @@
       </form><br>
     </div>
     <div class="movies-display">
-    <article ng-show="vm.selectedChannel.movies.length > 0"class="col-md-6">
-      <br>
-      <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
-        <dl>
-          <dd><div class="well" style="background-image: url({{movie.Poster}}); background-size: cover;">
-            <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button><h4>{{ movie.Title }}</h4><br>
-            <h5>Release Year: {{ movie.Year }}</h5><br>
-            <h5>Plot: </h5><p>{{ movie.Plot }}</p>
-          <!-- <div class="movie-poster">
-            <img src="{{movie.Poster}}">
-          </div> -->
-          </div></dd>
-        </dl>
-      </div>
-    </article>
+      <article ng-show="vm.selectedChannel.movies.length > 0"class="col-md-6">
+        <br>
+        <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
+          <dl>
+            <dd><div class="well" style="background-image: url({{movie.Poster}}); background-size: 300px 443px;">
+            <div ng-class="{'opaque' : vm.movieHideId === movie._id}">
+              <button class="btn btn-danger" ng-click="vm.deleteMovie(movie)">X</button>
+              <button class="btn btn-default" ng-click="vm.hideInfo(movie)">Hide Info</button>
+              <h4><a ui-sref="movie({id: movie._id, channelId: movie.channelId})">{{ movie.Title }}</a></h4><br>
+              <h5>Release Year: {{ movie.Year }}</h5><br>
+              <h5>Plot: <p>{{ movie.Plot }}</p></h5>
+              <h5>Rated: {{ movie.Rated }}</h5><br>
+              <h5>Released: {{ movie.Released }}</h5><br>
+              <h5>Runtime: {{ movie.Runtime }}</h5><br>
+              <h5>Genre: {{ movie.Genre }}</h5><br>
+              <h5>Director: {{ movie.Director }}</h5><br>
+              <h5>Writer: {{ movie.Writer }}</h5><br>
+              <h5>Actors: {{ movie.Actors }}</h5><br>
+              <h5>Language: {{ movie.Language }}</h5><br>
+              <h5>Country: {{ movie.Country }}</h5><br>
+              <h5>Awards: {{ movie.Awards }}</h5><br>
+              <h5>Metascore: {{ movie.Metascore }}</h5><br>
+              <h5>imdbRating: {{ movie.imdbRating }}</h5><br>
+              <h5>imdbVotes: {{ movie.imdbVotes }}</h5><br>
+              <h5>imdbId: {{ movie.imdbId }}</h5><br>
+              <h5>Type: {{ movie.Type }}</h5><br>
+              <h5>Tomato Meter: {{ movie.tomatoMeter }}</h5><br>
+              <h5>Tomato Image: {{ movie.tomatoImage }}</h5><br>
+              <h5>Tomato Rating: {{ movie.tomatoRating }}</h5><br>
+              <h5>Tomato Reviews: {{ movie.tomatoReviews }}</h5><br>
+              <h5>Tomato Fresh: {{ movie.tomatoFresh }}</h5><br>
+              <h5>Tomato Rotten: {{ movie.tomatoRotten }}</h5><br>
+              <h5>Tomato Consensus: <p>{{ movie.tomatoConsensus }}</p></h5><br>
+              <h5>Tomato User Meter: {{ movie.tomatoUserMeter }}</h5><br>
+              <h5>Tomato User Rating: {{ movie.tomatoUserRating }}</h5><br>
+              <h5>Tomato User Reviews: {{ movie.tomatoUserReviews }}</h5><br>
+              <h5>Tomato Url: <a href="{{ movie.tomatoUrl }}">{{ movie.tomatoUrl }}</a></h5><br>
+              <h5>DVD: {{ movie.DVD }}</h5><br>
+              <h5>BoxOffice: {{ movie.BoxOffice }}</h5><br>
+              <h5>Production: {{ movie.Production }}</h5><br>
+              <h5>Website: <a href="{{movie.Website}}">{{ movie.Website }}</a></h5><br>
+            </div>
+            </div></dd>
+          </dl>
+        </div>
+      </article>
     </div>
   </div>
 </section>

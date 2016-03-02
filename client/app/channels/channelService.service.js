@@ -7,7 +7,7 @@ angular.module('movieShareApp')
     svc.channels = [];
 
     svc.getChannels = function() {
-      var promise= $http.get('/api/channels');
+      var promise = $http.get('/api/channels');
       promise.then(function(response) {
         svc.channels = response.data;
       });
@@ -105,7 +105,8 @@ angular.module('movieShareApp')
             return $http.post('/api/channels',
                             { name: newChannelName,
                               description: newChannelDescription,
-                              share: newChannelShare
+                              share: newChannelShare,
+                              movies: []
                             });
           }
         }
@@ -114,5 +115,31 @@ angular.module('movieShareApp')
 
     svc.deleteChannel = function(channel) {
       return $http.delete('/api/channels/' + channel._id);
+    };
+
+    svc.copyChannel = function(channel) {
+      console.log(channel);
+      var matchStat = false;
+      $http.get('/api/channels').then(function(response) {
+        var channels = response.data;
+        channels.forEach(function(channelMatch) {
+          if (channelMatch._id === channel._id) {
+            console.log('CHANNEL ALREADY EXISTS');
+            matchStat = true;
+          }
+        });
+      });
+      if (matchStat !== true) {
+        return $http.post('/api/channels',
+                            { name: channel.name,
+                              description: channel.description,
+                              share: channel.share,
+                              movies: channel.movies
+                            });
+      }
+    }
+
+    svc.getMe = function() {
+      return $http.get('/api/users/me');
     };
   });

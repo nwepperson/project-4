@@ -71,6 +71,9 @@ body.ng-scope{
     background-color: #313131;
     padding-top: 0px;
     padding-bottom: 0px;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 450px;
     h4, h5, p {
       margin: 0px;
       background-color: #000000;
@@ -85,6 +88,7 @@ body.ng-scope{
       position: relative;
       float: right;
       margin-top: 5px;
+      margin-left: 5px;
     }
   }
 }
@@ -120,7 +124,10 @@ body.ng-scope{
 }
 
 .col-md-6 {
-  height: 500px;
+  min-height: 430px;
+  min-width: 350px;
+  max-height: 500px;
+  max-width: 1170px;
   overflow-y: scroll;
   border: 10px solid #0084FF;
   margin-bottom: 20px;
@@ -129,6 +136,15 @@ body.ng-scope{
   padding-bottom: 25px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (min-width: 992px) {
+  .col-md-6 {
+    width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+  }
 }
 
 .add-channel {
@@ -157,9 +173,6 @@ body.ng-scope{
   padding-top: 5px;
   overflow-y: scroll;
 }
-
-.movie-poster {
-  height: 50%;
-  width: 50%;
-  margin: auto;
+.opaque {
+  opacity: 0.05;
 }

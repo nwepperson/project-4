@@ -91,7 +91,7 @@ export function create(req, res) {
   }
   var channels;
   var match;
-  Channel.find().then(function(response) {
+  Channel.find({owner: req.user}).then(function(response) {
     channels = response;
     for (var i = 0; i < channels.length; i++) {
       var channel = channels[i];
@@ -107,7 +107,7 @@ export function create(req, res) {
     active: true,
     share: req.body.share,
     owner: req.user,
-    movies: []
+    movies: req.body.movies
     });
     };
   });
