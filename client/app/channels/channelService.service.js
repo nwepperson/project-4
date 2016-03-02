@@ -23,7 +23,7 @@ angular.module('movieShareApp')
     };
 
     svc.sendMovie = function(newMovie, channel) {
-      $http.get('http://www.omdbapi.com/?t=' + newMovie + '&tomatoes=true&plot=full')
+      $https.get('http://www.omdbapi.com/?t=' + newMovie + '&tomatoes=true&plot=full')
       .then(function(response) {
       if (response.data.Response === 'True') {
       return $http.post('/api/movies',
