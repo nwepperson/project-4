@@ -19,7 +19,7 @@
         <button type="submit" class="btn btn-primary" ng-click="vm.newChannel()">Create Channel</button>
       </form><br>
     </div>
-    <div class="channels-display-l">
+    <div class="channels-display-l" ng-show="vm.publicChannels.length > 0">
       <h3>Public Channels:</h3><br>
       <article class="col-md-6">
         <div class="panel panel-primary channel"
@@ -43,7 +43,7 @@
         </div>
       </article><br>
     </div>
-    <div class="channels-display-r">
+    <div class="channels-display-r" ng-show="vm.channels.length > 0">
       <h3>My Channels:</h3><br>
       <article class="col-md-6">
         <div class="panel panel-primary channel"
@@ -67,7 +67,7 @@
         </div>
       </article><br>
     </div>
-    <div class="add-movie">
+    <div class="add-movie" ng-show="(vm.selectedChannel) && vm.selectedChannel.owner._id === vm.me._id">
       <h3>Add movie to {{ vm.selectedChannel.name }}</h3>
       <form>
         <input class="form-control"
@@ -79,7 +79,7 @@
       </form><br>
     </div>
     <div class="movies-display">
-      <article ng-show="vm.selectedChannel.movies.length > 0"class="col-md-6">
+      <article ng-show="vm.selectedChannel.movies.length > 0" class="col-md-6">
         <br>
         <div class="animate-movies" ng-repeat="movie in vm.selectedChannel.movies">
           <dl>
