@@ -56,9 +56,7 @@ $main-color: #0084FF;
 }
 
 body.ng-scope{
-  animation: change 10s ease-in-out infinite alternate;
-  animation: backchange 10s ease-in-out infinite alternate;
-  animation: bordchange 10s ease-in-out infinite alternate;
+  margin-top: 100px;
   background-color: black;
   background-size: stretch;
   background-repeat: no-repeat;
@@ -79,6 +77,7 @@ body.ng-scope{
   .panel-heading {
     background-color: #313131;
     border-color: #313131;
+    min-height: 55px;
   }
   .channel {
     background-image: url('../assets/images/black.jpg');
@@ -134,8 +133,7 @@ body.ng-scope{
 }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  animation: change 10s ease-in-out infinite alternate;
-  // color: $main-color;
+  color: $main-color;
   background-color: #000000;
   border: 1px solid black;
   border-radius: 7%;

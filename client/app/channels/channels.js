@@ -17,7 +17,7 @@ angular.module('movieShareApp')
       })
       .state('movie', {
         url: '/movie/:id?channelId',
-        templateUrl: 'app/channels/movie.html',
+        templateUrl: 'app/channels/movie2.html',
         controller: 'MovieCtrl',
         controllerAs: 'vm'
       });

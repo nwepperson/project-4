@@ -1,0 +1,40 @@
+<a-scene>
+
+<a-sky src="3.jpeg" rotation="-90 -130 0">
+<a-animation attribute="rotation" from="-90 -130 0" to="-90 230 0" dur="300000" repeat="indefinite" easing="linear"></a-animation>
+</a-sky>
+
+<a-entity light="type: directional; color: #f665ff; intensity: 0.5" position="-1 1 0">
+<a-animation attribute="rotation" from="-90 -130 0" to="-90 230 0" dur="100000" repeat="indefinite" easing="linear"></a-animation></a-entity>
+<a-entity light="type: directional; color: #4bbaf9; intensity: 0.3" position="2 2 -1">
+<a-animation attribute="rotation" from="-90 130 0" to="-90 -230 0" dur="60000" repeat="indefinite" easing="linear"></a-animation></a-entity>
+<a-entity light="type: directional; color: #d14114; intensity: 0.3" position="-2 2 -1">
+<a-animation attribute="rotation" from="-90 130 0" to="-90 -230 0" dur="60000" repeat="indefinite" easing="linear"></a-animation></a-entity>
+<a-entity light="type: ambient; color: #120b2d"></a-entity>
+
+<a-cube position="-20 -95 0" scale="2 10 5" color="white"></a-cube>
+<a-cube position="-9 -95 -4" scale="2 2 2" rotation="0 0 30" color="white">
+<a-animation attribute="rotation" from="0 0 30" to="0 -360 30" dur="70000" repeat="indefinite" easing="linear"></a-animation></a-cube>
+<a-sphere position="-7 -98 -7" scale="3 3 3" color="white"></a-sphere>
+<a-cube position="-5 -98 -11" scale=".7 .7 .7" rotation="0 0 30" color="white">
+<a-animation attribute="rotation" from="0 0 30" to="0 360 30" dur="50000" repeat="indefinite" easing="linear"></a-animation></a-cube>
+<a-sphere position="0 -95 -15" scale="5 5 5" color="white"></a-sphere>
+<a-sphere position="4 -98 -1" scale=".5 .5 .5" color="white"></a-sphere>
+<a-cube position="8 -86 -10" scale="3 20 3" color="white"></a-cube>
+<a-cube position="9 -95 -4" scale="1.5 1.5 1.5" rotation="0 0 30" color="white">
+<a-animation attribute="rotation" from="0 0 30" to="0 360 30" dur="40000" repeat="indefinite" easing="linear"></a-animation></a-cube>
+<a-sphere position="23 -90 0" scale="10 10 10" color="white"></a-sphere>
+<a-cube position="9 -95 4" scale="3 3 3" rotation="0 0 30" color="white">
+<a-animation attribute="rotation" from="0 0 30" to="0 -360 30" dur="60000" repeat="indefinite" easing="linear"></a-animation></a-cube>
+<a-sphere position="25 -70 25" scale="12 12 12" color="white"></a-sphere>
+<a-sphere position="5 -95 9" scale="1 1 1" color="white"></a-sphere>
+<a-cube position="0 -88 20" scale="9 16 1" color="white"></a-cube>
+<a-sphere position="-5 -90 9" scale="3 3 3" color="white"></a-sphere>
+<a-sphere position="-7.5 -95 11" scale="4 4 4" color="white"></a-sphere>
+<a-sphere position="-9 -95 4" scale="1 1 1" color="white"></a-sphere>
+
+<a-camera wasd-controls-enabled="true" cursor-visible="false" position="0 -98 0"></a-camera>
+<a-curvedimage src="mountains.png" radius="500" theta-length="360" height="214" rotation="0 0 0" scale="1 1 1"></a-curvedimage>
+<a-cylinder src="mountains.png" radius="1000" position ="0 -100 0" height="0" color="black" sound="src:http://x627.com/vrexp/spheresandcubes.mp3; autoplay: true; loop:true; volume:10"></a-cylinder>
+
+</a-scene>

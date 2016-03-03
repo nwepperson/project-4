@@ -1,1 +1,43 @@
-<h1>{{vm.showMovie.Title}}</h1>
+<div class="movies-display">
+        <div class="animate-movies">
+          <dl>
+            <dd><div class="well" style="background-image: url({{vm.showMovie.Poster}}); background-size: 300px 443px;">
+              <h4>{{ vm.showMovie.Title }}</h4><br>
+              <h5>Release Year: {{ vm.showMovie.Year }}</h5><br>
+              <h5>Plot: <p>{{ vm.showMovie.Plot }}</p></h5>
+              <h5>Rated: {{ vm.showMovie.Rated }}</h5><br>
+              <h5>Released: {{ vm.showMovie.Released }}</h5><br>
+              <h5>Runtime: {{ vm.showMovie.Runtime }}</h5><br>
+              <h5>Genre: {{ vm.showMovie.Genre }}</h5><br>
+              <h5>Director: {{ vm.showMovie.Director }}</h5><br>
+              <h5>Writer: {{ vm.showMovie.Writer }}</h5><br>
+              <h5>Actors: {{ vm.showMovie.Actors }}</h5><br>
+              <h5>Language: {{ vm.showMovie.Language }}</h5><br>
+              <h5>Country: {{ vm.showMovie.Country }}</h5><br>
+              <h5>Awards: {{ vm.showMovie.Awards }}</h5><br>
+              <h5>Metascore: {{ vm.showMovie.Metascore }}</h5><br>
+              <h5>imdbRating: {{ vm.showMovie.imdbRating }}</h5><br>
+              <h5>imdbVotes: {{ vm.showMovie.imdbVotes }}</h5><br>
+              <h5>imdbId: {{ vm.showMovie.imdbId }}</h5><br>
+              <h5>Type: {{ vm.showMovie.Type }}</h5><br>
+              <h5>Tomato Meter: {{ vm.showMovie.tomatoMeter }}</h5><br>
+              <h5>Tomato Image: {{ vm.showMovie.tomatoImage }}</h5><br>
+              <h5>Tomato Rating: {{ vm.showMovie.tomatoRating }}</h5><br>
+              <h5>Tomato Reviews: {{ vm.showMovie.tomatoReviews }}</h5><br>
+              <h5>Tomato Fresh: {{ vm.showMovie.tomatoFresh }}</h5><br>
+              <h5>Tomato Rotten: {{ vm.showMovie.tomatoRotten }}</h5><br>
+              <h5>Tomato Consensus: <p>{{ vm.showMovie.tomatoConsensus }}</p></h5><br>
+              <h5>Tomato User Meter: {{ vm.showMovie.tomatoUserMeter }}</h5><br>
+              <h5>Tomato User Rating: {{ vm.showMovie.tomatoUserRating }}</h5><br>
+              <h5>Tomato User Reviews: {{ vm.showMovie.tomatoUserReviews }}</h5><br>
+              <h5>Tomato Url: <a href="{{ vm.showMovie.tomatoUrl }}">{{ vm.showMovie.tomatoUrl }}</a></h5><br>
+              <h5>DVD: {{ vm.showMovie.DVD }}</h5><br>
+              <h5>BoxOffice: {{ vm.showMovie.BoxOffice }}</h5><br>
+              <h5>Production: {{ vm.showMovie.Production }}</h5><br>
+              <h5>Website: <a href="{{vm.showMovie.Website}}">{{ vm.showMovie.Website }}</a></h5><br>
+            </div>
+            </div></dd>
+          </dl>
+        </div>
+      </article>
+    </div>
