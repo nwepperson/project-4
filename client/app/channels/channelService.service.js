@@ -26,6 +26,7 @@ angular.module('movieShareApp')
       $http.get('https://www.omdbapi.com/?t=' + newMovie + '&tomatoes=true&plot=full')
       .then(function(response) {
       if (response.data.Response === 'True') {
+        console.log('POSTING new movie:', response.data.Title);
       return $http.post('/api/movies',
                         { Title: response.data.Title,
                           Year: response.data.Year,
@@ -70,13 +71,18 @@ angular.module('movieShareApp')
     };
 
     svc.deleteMovie = function(movie, channel) {
-      console.log('movie: ', movie);
-      console.log('channel: ', channel);
+      console.log('movie: ', movie.Title);
+      // console.log('channel: ', channel);
       var index = channel.movies.indexOf(movie);
       console.log('index: ', index);
       var match = channel.movies[index];
-      console.log('match: ', match);
-      return $http.delete('/api/movies/' + channel._id + '/' + match._id);
+      if (match) {
+        console.log('DELETING match: ', match.Title);
+        return $http.delete('/api/movies/' + channel._id + '/' + match._id);
+      }
+      else {
+        console.log('match not found');
+      }
     };
 
     svc.findById = function(id) {

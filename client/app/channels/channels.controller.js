@@ -128,7 +128,7 @@ angular.module('movieShareApp')
     };
 
     vm.isSelected = function(channel) {
-      return channel._id === vm.selectedChannel._id;
+      return vm.selectedChannel && channel._id === vm.selectedChannel._id;
     };
 
     vm.sendMovie = function() {

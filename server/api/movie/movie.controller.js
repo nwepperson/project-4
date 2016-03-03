@@ -16,7 +16,8 @@ import User from '../user/user.model';
 var MovieEvents = require('./movie.events');
 
 function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
+  console.log('respondWithResult with res.statusCode:', res.statusCode);
+  statusCode = statusCode || res.statusCode || 200;
   return function(entity) {
     if (entity) {
       res.status(statusCode).json(entity);
@@ -56,8 +57,10 @@ function handleEntityNotFound(res) {
 }
 
 function handleError(res, statusCode) {
-  statusCode = statusCode || 500;
+  console.log('handleError with res.statusCode:', res.statusCode);
+  statusCode = statusCode || res.statusCode || 500;
   return function(err) {
+    console.log('handleError sending response with statusCode:', statusCode);
     res.status(statusCode).send(err);
   };
 }
@@ -79,46 +82,43 @@ export function show(req, res) {
 
 // Creates a new Movie in the DB
 export function create(req, res) {
+  console.log('CREATING A NEW MOVIE');
   if (!req.user) {
     return res.status(404).send('It looks like you aren\'t logged in, please try again.');
   }
   Channel.findById(req.body.channelId)
   .then(function(channel) {
     if (!channel) {
+      console.log('Channel not found.');
       return res.status(404).send('Channel not found.');
     }
-    User.find(req.user).then(function(res) {
-      var user = String(res[0]._id);
-      console.log('user res[0]: ', res[0]._id)
-      User.find(channel.owner).then(function(response) {
-        var userMatch = String(response[0]._id);
-        console.log('userMatch response[0]: ', response[0]._id);
-        if (user === userMatch) {
-          var exists;
-          channel.movies.forEach(function(movie) {
-            if (movie.imdbId === req.body.imdbId) {
-              console.log('MOVIE ALREADY EXISTS IN CHANNEL');
-              exists = true;
-            }
-          });
-          if (exists !== true) {
-            var newMovie = channel.movies.create(req.body);
-            channel.movies.push(newMovie);
-            console.log('newMovie id created in api/movie.controller', newMovie._id);
-            channel.save();
-            return MovieEvents.emit('save', { movie: newMovie, channelId: channel._id });
-          }
-        }
-        else {
-          console.log('user: ', typeof user, user);
-          console.log('userMatch: ', typeof userMatch, userMatch);
-          console.log("Cannot add to another user's list");
-        }
-      });
+    console.log('Comparing req.user._id !== channel.owner:', req.user._id, channel.owner);
+    if (req.user._id.equals(channel.owner) === false) {
+      console.log("Cannot add to another user's list");
+      return res.status(401).send('User not authorized to add movie to that channel');
+    }
+    console.log('users match');
+    var exists = _.find(channel.movies, function(movie) {
+      return movie.imdbId === req.body.imdbId;
     });
+    if (exists) {
+      console.log('MOVIE ALREADY EXISTS IN CHANNEL:', exists.Title);
+      // return res.status(400).send('Movie Already Exists in Channel.');
+      res.status(400).end();
+      return null;
+    }
+
+    var newMovie = channel.movies.create(req.body);
+    channel.movies.push(newMovie);
+    console.log('newMovie id created in api/movie.controller', newMovie._id, newMovie.Title);
+    MovieEvents.emit('save', { movie: newMovie, channelId: channel._id });
+    return channel.save();
   })
   .then(respondWithResult(res, 201))
-  .catch(handleError(res));
+  .catch(function(res) {
+    console.log('calling handleError, res.customStatus =', res.customStatus);
+    return handleError(res);
+  });
 }
 
 // Updates an existing Movie in the DB
@@ -135,37 +135,34 @@ export function update(req, res) {
 
 // Deletes a Movie from the DB
 export function destroy(req, res) {
+  if (!req.user) {
+    return res.status(404).send('It looks like you aren\'t logged in, please try again.');
+  }
   Channel.findById(req.params.id)
   .then(function(channel) {
-    console.log(channel.movies);
     if (!channel) {
+      console.log('Channel not found.');
       return res.status(404).send('Channel not found.');
     }
-    User.find(req.user).then(function(res) {
-      var user = String(res[0]._id);
-      console.log('user res[0]: ', res[0]._id)
-      User.find(channel.owner).then(function(response) {
-        var userMatch = String(response[0]._id);
-        console.log('userMatch response[0]: ', response[0]._id);
-        if (user === userMatch) {
-          channel.movies.forEach(function(movie) {
-            if (movie._id.equals(req.params.movieId)) {
-              console.log('Movie Match in DB', movie);
-              var index = channel.movies.indexOf(movie);
-              console.log('Index: ', index);
-              channel.movies.splice(index, 1);
-              channel.save();
-              return MovieEvents.emit('remove', { movie: movie, channelId: channel._id });
-            }
-          });
-        }
-        else {
-          console.log('user: ', typeof user, user);
-          console.log('userMatch: ', typeof userMatch, userMatch);
-          console.log("Cannot delete from another user's list");
-        }
-      });
+    console.log('Comparing req.user._id !== channel.owner:', req.user._id, channel.owner);
+    if (req.user._id.equals(channel.owner) === false) {
+      console.log("Cannot delete from another user's list");
+      return res.status(401).send('User not authorized to add movie to that channel');
+    }
+    console.log('users match');
+    var exists = _.find(channel.movies, function(movie) {
+      return movie._id.equals(req.params.movieId);
     });
+    if (!exists) {
+      console.log('MOVIE DOES NOT EXIST IN CHANNEL:');
+      res.status(400).end();
+      return null;
+    }
+    var index = channel.movies.indexOf(exists);
+    console.log('Index: ', index);
+    channel.movies.splice(index, 1);
+    MovieEvents.emit('remove', { movie: exists, channelId: channel._id });
+    return channel.save();
   })
   .then(respondWithResult(res, 201))
   .catch(handleError(res));
