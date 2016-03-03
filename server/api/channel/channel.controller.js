@@ -99,7 +99,7 @@ export function create(req, res) {
         console.log('match name');
         match = true;
       }
-    };
+    }
     if (match !== true) {
     var newChannel = Channel.create({
     name: req.body.name,
@@ -109,7 +109,7 @@ export function create(req, res) {
     owner: req.user,
     movies: req.body.movies
     });
-    };
+    }
   });
 }
 

@@ -3,6 +3,7 @@
 angular.module('movieShareApp')
   .controller('ChannelsCtrl', function(channelService, $scope, socketFactory) {
     var vm = this;
+    vm.party = false;
     vm.newMovie = 'Search for movie here';
     vm.movieHideId = '';
     channelService.getMe().then(function(response) {
@@ -106,7 +107,7 @@ angular.module('movieShareApp')
         });
 
         socket.on('channel:remove', function(eventData) {
-          var channel = eventData
+          var channel = eventData;
           var index = vm.channels.indexOf(channel);
           vm.channels.splice(index, 1);
           channelService.getChannels().then(function(response) {
@@ -166,6 +167,16 @@ angular.module('movieShareApp')
       else {
         vm.movieHideId = movie._id;
       }
+    };
+
+    vm.partymode = function() {
+      if (vm.party === false) {
+        vm.party = true;
+      }
+      else {
+        vm.party = false;
+      }
+      console.log(vm.party);
     }
   });
 

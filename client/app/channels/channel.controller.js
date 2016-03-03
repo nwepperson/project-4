@@ -81,11 +81,11 @@ angular.module('movieShareApp')
                 vm.publicChannels = response.data;
               });
             });
-          };
+          }
         });
 
         socket.on('channel:save', function(eventData) {
-          var channel = eventData
+          var channel = eventData;
           var match;
           vm.channels.forEach(function(channelSearch) {
             if (channelSearch.name === channel.name) {
@@ -102,11 +102,11 @@ angular.module('movieShareApp')
                 vm.publicChannels = response.data;
               });
             });
-          };
+          }
         });
 
         socket.on('channel:remove', function(eventData) {
-          var channel = eventData
+          var channel = eventData;
           var index = vm.channels.indexOf(channel);
           vm.channels.splice(index, 1);
           channelService.getChannels().then(function(response) {
@@ -160,6 +160,6 @@ angular.module('movieShareApp')
       else {
         vm.movieHideId = movie._id;
       }
-    }
+    };
   });
 

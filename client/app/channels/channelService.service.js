@@ -80,7 +80,7 @@ angular.module('movieShareApp')
     };
 
     svc.findById = function(id) {
-      console.log('findById called with id:', id)
+      console.log('findById called with id:', id);
       console.log('svc.channels:', svc.channels);
       var result = _.find(svc.channels, function(channel) {
         return channel._id === id;
@@ -137,7 +137,7 @@ angular.module('movieShareApp')
                               movies: channel.movies
                             });
       }
-    }
+    };
 
     svc.getMe = function() {
       return $http.get('/api/users/me');

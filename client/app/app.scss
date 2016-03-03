@@ -23,37 +23,54 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
 @import '../components/modal/modal';
 // endinjector
 
+$main-color: #0084FF;
+
+@keyframes change {
+  0% {color: #0084FF;}
+  25% {color: #00FF99;}
+  50% {color: #99FF33;}
+  75% {color: #FF8533;}
+  100% {color: #CC33FF;}
+}
+
+@keyframes backchange {
+  0% {background-color: #0084FF;}
+  25% {background-color: #00FF99;}
+  50% {background-color: #99FF33;}
+  75% {background-color: #FF8533;}
+  100% {background-color: #CC33FF;}
+}
+
+@keyframes bordchange {
+  0% {border-color: #0084FF;}
+  25% {border-color: #00FF99;}
+  50% {border-color: #99FF33;}
+  75% {border-color: #FF8533;}
+  100% {border-color: #CC33FF;}
+}
+
+.color-change {
+  animation: change 10s ease-in-out infinite alternate;
+  animation: backchange 10s ease-in-out infinite alternate;
+  animation: bordchange 10s ease-in-out infinite alternate;
+}
+
 body.ng-scope{
+  animation: change 10s ease-in-out infinite alternate;
+  animation: backchange 10s ease-in-out infinite alternate;
+  animation: bordchange 10s ease-in-out infinite alternate;
   background-color: black;
   background-size: stretch;
   background-repeat: no-repeat;
-  h1 {
+  h1, h2, h3, p, label, dt, dd {
     color: white;
   }
-  h2 {
-    color: white;
-  }
-  h3 {
-    color: white;
-  }
-  h4 {
-    color: #0084FF;
-  }
-  p {
-    color: white;
-  }
-  a {
-    color: #0084FF;
-  }
-  label {
-    color: white;
-  }
-  dt, dd {
-    color: white;
+  h4, a {
+    color: $main-color;
   }
   .btn {
-    background-color: #0084FF;
-    border-color: #0084FF;
+    background-color: $main-color;
+    border-color: $main-color;
     color: white;
   }
   .panel-primary {
@@ -97,15 +114,15 @@ body.ng-scope{
   background-color: #313131;
   border-color: #313131;
   .navbar-brand {
-    color: #0084FF;
+    color: $main-color;
   }
   .navbar-text {
-    color: #0084FF;
+    color: $main-color;
   }
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: #0084FF;
+  color: $main-color;
 }
 
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
@@ -117,7 +134,8 @@ body.ng-scope{
 }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  color: #0084FF;
+  animation: change 10s ease-in-out infinite alternate;
+  // color: $main-color;
   background-color: #000000;
   border: 1px solid black;
   border-radius: 7%;
@@ -129,7 +147,9 @@ body.ng-scope{
   max-height: 500px;
   max-width: 1170px;
   overflow-y: scroll;
-  border: 10px solid #0084FF;
+  border-width: 10px;
+  border-style: solid;
+  border-color: $main-color;
   margin-bottom: 20px;
   border-radius: 10px;
   padding-top: 25px;
