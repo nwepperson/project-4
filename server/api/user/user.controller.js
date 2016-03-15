@@ -4,6 +4,7 @@ import User from './user.model';
 import passport from 'passport';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import Channel from '../channel/channel.model';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -16,6 +17,46 @@ function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
     res.status(statusCode).send(err);
+  };
+}
+
+function respondWithResult(res, statusCode) {
+  statusCode = statusCode || 200;
+  return function(entity) {
+    if (entity) {
+      res.status(statusCode).json(entity);
+    }
+  };
+}
+
+function saveUpdates(updates) {
+  return function(entity) {
+    var updated = _.merge(entity, updates);
+    return updated.saveAsync()
+      .spread(updated => {
+        return updated;
+      });
+  };
+}
+
+function removeEntity(res) {
+  return function(entity) {
+    if (entity) {
+      return entity.removeAsync()
+        .then(() => {
+          res.status(204).end();
+        });
+    }
+  };
+}
+
+function handleEntityNotFound(res) {
+  return function(entity) {
+    if (!entity) {
+      res.status(404).end();
+      return null;
+    }
+    return entity;
   };
 }
 
@@ -69,6 +110,17 @@ export function show(req, res, next) {
  * restriction: 'admin'
  */
 export function destroy(req, res) {
+  var userChannels = [];
+  Channel.find({owner: req.params.id})
+    .then(function(response) {
+      console.log('response: ', response);
+      response.forEach(function(chan) {
+        Channel.findById(chan._id)
+          .then(handleEntityNotFound(res))
+          .then(removeEntity(res))
+          .catch(handleError(res));
+      });
+    });
   User.findByIdAndRemoveAsync(req.params.id)
     .then(function() {
       res.status(204).end();

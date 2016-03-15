@@ -161,5 +161,11 @@ angular.module('movieShareApp')
         vm.movieHideId = movie._id;
       }
     };
+
+    vm.editChannel = function(channel) {
+      vm.editChannelName = channel.name;
+      vm.editChannelDescription = channel.description;
+      vm.editChannelShare = channel.share;
+    }
   });
 

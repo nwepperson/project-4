@@ -3,6 +3,7 @@
     <article>
       <div class="panel-heading">
         <h3 class="panel-title">{{vm.showChannel.owner.name}}'s {{ vm.showChannel.name }} <button class="btn btn-danger" ng-show="vm.me._id !== vm.showChannel.owner._id" ng-click="vm.copyChannel(vm.showChannel)">Copy Channel</button>
+        <button class="btn btn-danger" ng-show="vm.me._id === vm.showChannel.owner._id" ng-click="vm.editChannel(vm.showChannel)">Copy Channel</button>
         <form ng-show="vm.me._id === vm.showChannel.owner._id" class="form-inline" style="float:right;">
           <div class="form-group">
             <input class="form-control" ng-model="vm.newMovie" onfocus="if (this.value=='Search for movie here') this.value = ''"></input>

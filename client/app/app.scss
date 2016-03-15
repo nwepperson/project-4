@@ -49,12 +49,6 @@ $main-color: #0084FF;
   100% {border-color: #CC33FF;}
 }
 
-.color-change {
-  animation: change 10s ease-in-out infinite alternate;
-  animation: backchange 10s ease-in-out infinite alternate;
-  animation: bordchange 10s ease-in-out infinite alternate;
-}
-
 body.ng-scope{
   margin-top: 100px;
   background-color: black;
@@ -193,4 +187,10 @@ body.ng-scope{
 }
 .opaque {
   opacity: 0.05;
+}
+
+.party {
+  animation: change 10s ease-in-out infinite alternate !important;
+  animation: backchange 10s ease-in-out infinite alternate !important;
+  animation: bordchange 10s ease-in-out infinite alternate !important;
 }
